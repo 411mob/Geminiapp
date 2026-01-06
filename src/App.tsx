@@ -2,7 +2,7 @@ import './App.css'
 import InputComponent from './components/input'
 import Display, { type Message } from './components/display'
 import { useState } from 'react'
-import { sendMessageToGemini } from './components/gemini'
+import { sendMessageToGemini } from './components/groq'
 
 function App() {
   const [messages, setMessages] = useState<Message[]>([])
