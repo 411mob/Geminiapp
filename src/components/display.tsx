@@ -1,4 +1,5 @@
 import './display.css';
+import groqIcon from '../assets/groq-icon.png';
 
 type Message = {
   role: "user" | "assistant";
@@ -16,7 +17,7 @@ function Display({ messages, isLoading }: DisplayProps) {
     <div className="chat-container">
       {messages.length === 0 && !isLoading ? (
         <div className="empty-chat">
-          <p>Geminiに質問してみましょう！✨</p>
+          <p> Groqに質問してみましょう</p>
         </div>
       ) : (
         <div className="messages-list">
@@ -25,12 +26,14 @@ function Display({ messages, isLoading }: DisplayProps) {
               key={index}
               className={`message ${message.role === "user" ? "my-message" : "other-message"}`}
             >
-              <div className="message-avatar">
-                {message.role === "user" ? "👤" : "✨"}
-              </div>
+              {message.role === "assistant" && (
+                <div className="message-avatar">
+                  <img src={groqIcon} alt="Groq" />
+                </div>
+              )}
               <div className="message-content">
                 <div className="message-role">
-                  {message.role === "user" ? "あなた" : "Gemini"}
+                  {message.role === "user" ? "あなた" : "Groq"}
                 </div>
                 <div className="message-text">{message.content}</div>
                 <div className="message-time">
