@@ -24,14 +24,16 @@ export async function callGroq(message: Message[]):Promise<string> {
     },
     body: JSON.stringify({
       messages: groqMessages,
-      model: "mixtral-8x7b-32768",
+      model: "openai/gpt-oss-120b",
       stream: false,
       temperature: 0.7,
     })
   });
 
   if (!response.ok) {
-    throw new Error(`GROQ APIエラー: ${response.statusText}`);
+    const errorData = await response.json();
+    console.error("GROQ API Error Response:", errorData);
+    throw new Error(`GROQ APIエラー: ${JSON.stringify(errorData)}`);
   }
 
   const data = await response.json();
