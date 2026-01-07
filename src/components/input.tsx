@@ -28,7 +28,7 @@ function InputComponent({ onSendMessage, isLoading }: InputComponentProps) {
       <div className="message-input">
         <input
           type="text"
-          placeholder="Geminiに質問してみよう..."
+          placeholder="Groqに質問してみよう..."
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyPress}
           value={inputValue}

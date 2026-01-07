@@ -2,14 +2,13 @@ import './App.css'
 import InputComponent from './components/input'
 import Display, { type Message } from './components/display'
 import { useState } from 'react'
-import { sendMessageToGemini } from './components/groq'
+import { callGroq } from './components/groq'
 
 function App() {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSendMessage = async (content: string) => {
-    // ユーザーのメッセージを追加
     const userMessage: Message = {
       role: "user",
       content,
@@ -17,32 +16,40 @@ function App() {
     };
     setMessages(prev => [...prev, userMessage]);
 
-    // Geminiに送信
     setIsLoading(true);
     try {
-      const response = await sendMessageToGemini(content);
-      const geminiMessage: Message = {
-        role: "gemini",
-        content: response.text || "応答を取得できませんでした",
+      const groqMessages: Array<{ role: "user" | "assistant"; content: string }> = messages.map(msg => ({
+        role: msg.role === "user" ? "user" : "assistant",
+        content: msg.content
+      }));
+      groqMessages.push({ role: "user", content });
+      
+      const response = await callGroq(groqMessages);
+
+      const assistantMessagge: Message = {
+        role: "assistant",
+        content: response || "応答を取得できませんでした",
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, geminiMessage]);
+      setMessages(prev => [...prev, assistantMessagge]);
     } catch (error) {
-      console.error("Gemini API error:", error);
+      console.error("Groq API error", error);
+
       const errorMessage: Message = {
-        role: "gemini",
+        role: "assistant",
         content: "エラーが発生しました。もう一度お試しください。",
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
-      setIsLoading(false);
-    }
+        setIsLoading(false);  
+      }
   };
+      
 
   return (
     <div className="app-container">
-      <h1>✨ Gemini チャット</h1>
+      <h1>✨ Groq チャット</h1>
       <Display messages={messages} isLoading={isLoading} />
       <InputComponent onSendMessage={handleSendMessage} isLoading={isLoading} />
     </div>

@@ -1,7 +1,7 @@
 import './display.css';
 
 type Message = {
-  role: "user" | "gemini";
+  role: "user" | "assistant";
   content: string;
   timestamp: Date;
 };
