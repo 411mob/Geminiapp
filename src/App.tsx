@@ -26,12 +26,12 @@ function App() {
       
       const response = await callGroq(groqMessages);
 
-      const assistantMessagge: Message = {
+      const assistantMessage: Message = {
         role: "assistant",
         content: response || "応答を取得できませんでした",
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, assistantMessagge]);
+      setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Groq API error", error);
 
